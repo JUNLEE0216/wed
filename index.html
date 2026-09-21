@@ -196,26 +196,9 @@
 
     <sc-if value="{{ showDday }}" hint-placeholder-val="{{ true }}">
       <div style="margin-top: 44px; padding: 30px 20px 26px; background: #f7f2e9; border: 1px solid #e6ddce; border-radius: 6px;">
-        <div style="display: flex; align-items: flex-start; justify-content: center; gap: clamp(2px, 1.2vw, 10px);">
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; flex: 1 1 0;">
-            <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(28px, 8.2vw, 44px); line-height: 1; color: #3a352d;">{{ cd.d }}</span>
-            <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(9px, 2.6vw, 11px); letter-spacing: .18em; text-transform: uppercase; color: #a59a89;">Days</span>
-          </div>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 5.4vw, 30px); color: #cfc3ae;">:</span>
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; flex: 1 1 0;">
-            <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(28px, 8.2vw, 44px); line-height: 1; color: #3a352d;">{{ cd.h }}</span>
-            <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(9px, 2.6vw, 11px); letter-spacing: .18em; text-transform: uppercase; color: #a59a89;">Hours</span>
-          </div>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 5.4vw, 30px); color: #cfc3ae;">:</span>
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; flex: 1 1 0;">
-            <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(28px, 8.2vw, 44px); line-height: 1; color: #3a352d;">{{ cd.m }}</span>
-            <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(9px, 2.6vw, 11px); letter-spacing: .18em; text-transform: uppercase; color: #a59a89;">Min</span>
-          </div>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 5.4vw, 30px); color: #cfc3ae;">:</span>
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; flex: 1 1 0;">
-            <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(28px, 8.2vw, 44px); line-height: 1; color: #3a352d;">{{ cd.s }}</span>
-            <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(9px, 2.6vw, 11px); letter-spacing: .18em; text-transform: uppercase; color: #a59a89;">Sec</span>
-          </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+          <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(44px, 13vw, 64px); line-height: 1; color: #3a352d;">{{ cd.d }}</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(10px, 2.8vw, 12px); letter-spacing: .24em; text-transform: uppercase; color: #a59a89;">Days</span>
         </div>
         <p style="margin-top: 24px; font-family: 'Gowun Batang', serif; font-size: clamp(13px, 3.8vw, 15px); letter-spacing: .02em; line-height: 1.7; color: #6b6357;">준우 <span style="color: #cfa1a6;">♥</span> 혜민의 결혼식이 <span style="color: var(--accent);">{{ dday }}</span>일 남았습니다.</p>
       </div>
@@ -287,24 +270,19 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#a9854a&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[[&quot;#a9854a&quot;,&quot;#c2b8a3&quot;],[&quot;#8a7b63&quot;,&quot;#b8a98e&quot;],[&quot;#9c6b5a&quot;,&quot;#c7a99a&quot;],[&quot;#6b7a6e&quot;,&quot;#a8b3a5&quot;]]},&quot;grayscalePhotos&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showCountdown&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
 class Component extends DCLogic {
-  state = { cd: { d: '--', h: '--', m: '--', s: '--' }, dday: '--', copied: '', galleryOpen: false, activeSide: null };
+  state = { cd: { d: '--' }, dday: '--', copied: '', galleryOpen: false, activeSide: null };
 
   componentDidMount() {
     this.tick();
-    this.timer = setInterval(() => this.tick(), 1000);
+    this.timer = setInterval(() => this.tick(), 60000);
   }
   componentWillUnmount() { clearInterval(this.timer); }
 
   tick() {
     const target = new Date('2026-12-06T11:30:00+09:00').getTime();
-    let diff = Math.max(0, target - Date.now());
-    const d = Math.floor(diff / 86400000); diff -= d * 86400000;
-    const dday = d;
-    const h = Math.floor(diff / 3600000); diff -= h * 3600000;
-    const m = Math.floor(diff / 60000); diff -= m * 60000;
-    const s = Math.floor(diff / 1000);
-    const p = n => String(n).padStart(2, '0');
-    this.setState({ cd: { d: p(d), h: p(h), m: p(m), s: p(s) }, dday });
+    const diff = Math.max(0, target - Date.now());
+    const d = Math.floor(diff / 86400000);
+    this.setState({ cd: { d: String(d).padStart(2, '0') }, dday: d });
   }
 
   copyNum(num) {
