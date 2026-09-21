@@ -32,7 +32,7 @@
   a { color: var(--accent); text-decoration: none; }
   a:hover { opacity: .75; }
   @keyframes floatIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-  html, body { overflow-x: hidden; max-width: 100%; }
+  html, body { overflow-x: clip; max-width: 100%; }
   img, .tl-media { max-width: 100%; }
   @keyframes coverFade { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
   @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
@@ -43,7 +43,7 @@
   @keyframes fall { 0% { opacity: 0; transform: translateY(-8px) rotate(0); } 15% { opacity: 1; } 100% { opacity: 0; transform: translateY(64px) rotate(220deg); } }
 </style>
 </helmet>
-<div style="--accent: {{ accent }}; --photoFilter: {{ photoFilter }}; width: 100%; max-width: 560px; margin: 0 auto; background: #fbf8f2; color: #2c2822; overflow: hidden;">
+<div style="--accent: {{ accent }}; --photoFilter: {{ photoFilter }}; width: 100%; max-width: 560px; margin: 0 auto; background: #fbf8f2; color: #2c2822; overflow: clip;">
 <audio id="bgm" src="assets/intro_music.mp3" loop preload="auto"></audio>
 <button id="bgmBtn" onclick="toggleBgm()" style="position: fixed; top: 16px; right: 16px; z-index: 50; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(169,133,74,.35); background: rgba(251,248,242,.85); backdrop-filter: blur(6px); color: var(--accent); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;">♪</button>
   <!-- ============ COVER ============ -->
@@ -223,21 +223,22 @@
     
   </section>
 
-  <!-- ============ GALLERY ============ -->
-  <section style="padding: 78px clamp(20px, 6vw, 38px) 74px; background: linear-gradient(#fbf8f2 0, #f4efe6 90px, #f4efe6 calc(100% - 90px), #fbf8f2 100%); text-align: center;">
-    <p style="font-family: 'Cormorant Garamond', serif; font-size: 12px; letter-spacing: .4em; text-transform: uppercase; color: var(--accent);">Gallery</p>
-  <h2 style="font-family: 'Gowun Batang', serif; font-size: clamp(20px, 5.6vw, 24px); letter-spacing: .06em; color: #2c2822; margin: 14px 0 36px;">순간의 기록</h2>
-    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(7px, 2.4vw, 10px);">
-      <img src="assets/q1.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q7.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q3.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q4.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q5.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q6.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q2.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q9.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q10.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
-      <img src="assets/q12.jpg" alt="" style="width: 100%; border-radius: 4px; display: block;">
+    <!-- ============ GALLERY ============ -->
+  <section style="padding: 78px 0 74px; background: linear-gradient(#fbf8f2 0, #f4efe6 90px, #f4efe6 calc(100% - 90px), #fbf8f2 100%);">
+    <div style="text-align: center; padding: 0 clamp(20px, 6vw, 38px) 34px;">
+      <p style="font-family: 'Cormorant Garamond', serif; font-size: 12px; letter-spacing: .4em; text-transform: uppercase; color: var(--accent);">Gallery</p>
+      <h2 style="font-family: 'Gowun Batang', serif; font-size: clamp(20px, 5.6vw, 24px); letter-spacing: .06em; color: #2c2822; margin: 14px 0 6px;">순간의 기록</h2>
+    </div>
+
+    <div style="padding: 0 clamp(20px, 6vw, 38px);">
+      <sc-for list="{{ gallery }}" as="p" hint-placeholder-count="10">
+        <div style="position: sticky; top: {{ p.top }}; padding-bottom: 46px;">
+          <div style="position: relative; border-radius: 4px; overflow: hidden; background: #e6ddce; box-shadow: 0 -2px 0 rgba(255,253,248,.9), 0 18px 40px rgba(80,65,45,.22); aspect-ratio: 4/5; transform: rotate({{ p.rot }}); filter: var(--photoFilter);">
+            <img src="{{ p.src }}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+            <span style="position: absolute; left: 16px; bottom: 14px; font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: .3em; color: #fffdf8; text-shadow: 0 1px 6px rgba(0,0,0,.5);">{{ p.label }}</span>
+          </div>
+        </div>
+      </sc-for>
     </div>
   </section>
 
@@ -326,12 +327,13 @@ class Component extends DCLogic {
       { date: '2026.08.01', title: '웨딩 데이', desc: "너와 나, 이제 '우리'가 되는 날", slot: 'Wedding Day' },
     ];
 
-    const expanded = this.state.galleryOpen;
-    const total = 20;
-    const gallery = [];
-    for (let i = 1; i <= (expanded ? total : 6); i++) gallery.push({ id: 'gal-' + i, label: String(i).padStart(2, '0') });
-    const moreLabel = expanded ? '접기 ⌃' : '더보기 ⌄';
-    const toggleGallery = () => this.setState(s => ({ galleryOpen: !s.galleryOpen }));
+    const galleryFiles = ['q1','q7','q3','q4','q5','q6','q2','q9','q10','q12'];
+    const gallery = galleryFiles.map((f, i) => ({
+      src: 'assets/' + f + '.jpg',
+      label: String(i + 1).padStart(2, '0'),
+      top: (52 + i * 7) + 'px',
+      rot: (i % 2 ? 0.5 : -0.5) + 'deg',
+    }));
 
     const rawGroups = [
       { side: '신랑측', items: [
@@ -366,7 +368,7 @@ class Component extends DCLogic {
       showDday: this.props.showCountdown ?? true,
       cd: this.state.cd,
       dday: this.state.dday,
-      days, timeline, gallery, accountTabs, activeAccounts, moreLabel, toggleGallery,
+      days, gallery, accountTabs, activeAccounts,
     };
   }
 }
