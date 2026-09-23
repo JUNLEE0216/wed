@@ -205,7 +205,7 @@
           <span style="position: absolute; top: -3px; left: {{ progress }}; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); transform: translateX(-50%); box-shadow: 0 0 0 3px #f7f2e9;"></span>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .04em; color: #a59a89;">
-          <span>2017. 02 첫 만남</span>
+          <span>2017. 02. 16 첫 만남</span>
           <span style="color: var(--accent);">2026. 12. 06</span>
         </div>
         <p style="font-family: 'Gowun Batang', serif; font-size: clamp(13px, 3.8vw, 15px); line-height: 1.7; color: #6b6357; text-align: center; margin-top: 22px;">준우 <span style="color: #cfa1a6;">♥</span> 혜민의 결혼식이 <span style="color: var(--accent);">{{ dday }}</span>일 남았습니다.</p>
@@ -287,7 +287,7 @@ class Component extends DCLogic {
   componentWillUnmount() { clearInterval(this.timer); }
 
   tick() {
-    const start = new Date('2017-02-01T00:00:00+09:00').getTime();
+    const start = new Date('2017-02-16T00:00:00+09:00').getTime();
     const target = new Date('2026-12-06T11:30:00+09:00').getTime();
     const now = Date.now();
     const diff = Math.max(0, target - now);
